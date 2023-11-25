@@ -29,7 +29,7 @@ st.title("Course Recommender System")
 
 selected_course_name = st.selectbox(
 'Select a course to recommend',
-courses['original_title'].values)
+courses['Course Name'].values)
 
 # Output recommendations with posters
 if st.button('Recommend'):
