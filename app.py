@@ -3,7 +3,7 @@ import streamlit as st
 import pickle
 import pandas as pd
 
-# Recommend movies based on content
+# Recommend courses based on the cosine similarity score of the course selected by the user
 def recommend(course):
     course_index = courses[courses['Course Name'] == course].index[0]
     distances = similarity[course_index]
@@ -11,10 +11,8 @@ def recommend(course):
 
     recommended_courses = []
 
-    # Fetch the posters for each recommended movie
     for  i in courses_list:
-        #course_id = courses.iloc[i[0]].id
-        recommended_courses.append(courses.iloc[i[0]].original_title)
+        recommended_courses.append(courses.iloc[i[0]]['Course Name'])
 
     return recommended_courses
 
@@ -28,21 +26,13 @@ similarity = pickle.load(open('similarity.pkl','rb'))
 st.title("Course Recommender System")
 
 selected_course_name = st.selectbox(
-'Select a course to recommend',
-courses['original_title'].values)
+    'Select a course to recommend',
+    courses['Course Name'].values)
 
-# Output recommendations with posters
+# Output recommendations
 if st.button('Recommend'):
-    name = recommend(selected_course_name)
+    recommended_courses = recommend(selected_course_name)
  
-    col1, col2, col3, col4,  col5 = st.columns(5)
-    with col1:
-        st.text(name[0])
-    with col2:
-        st.text(name[1])
-    with col3:
-        st.text(name[2])
-    with col4:
-        st.text(name[3])
-    with col5:
-        st.text(name[4])
+    # Display recommended courses as separate lines
+    for course in recommended_courses:
+        st.write(course)
